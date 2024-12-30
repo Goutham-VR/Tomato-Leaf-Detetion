@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict Tomato Disease</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form {
+            margin: 20px 0;
+        }
+        .features-section {
+            margin-bottom: 20px;
+        }
+        .feature h3 {
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 10px;
+        }
+        .feature p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            display: block;
+            margin: 0 auto 20px auto;
+            max-width: 100%;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        h2 {
+            font-size: 20px;
+            color: #28a745;
+            margin-top: 20px;
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 20px;
+            }
+            button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Predict Tomato Disease</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <section class="features-section">
+                <div class="feature">
+                    <h3>Upload a Tomato Leaf Image</h3>
+                    <p>Select a clear image of a tomato leaf to preview it before processing:</p>
+                    <input type="file" name="image" id="imageInput" accept="image/*">
+                    <img id="imagePreview" src="#" alt="Preview" style="display: none;">
+                </div>
+            </section>
+            <button type="submit">Predict</button>
+        </form>
+        {% if prediction %}
+            <h2>Prediction: {{ prediction }}</h2>
+        {% endif %}
+        {% if confidence %}
+            <p>Confidence: {{ confidence }}</p>
+        {% endif %}
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+    </div>
+    <script>
+        // JavaScript to preview image
+        document.getElementById('imageInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block'; // Show the image
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
